@@ -10,13 +10,29 @@ class Job
 {
 	protected $createTime;
 
-	public function __construct()
+	protected $delay;
+
+	public function __construct($delay = 0)
 	{
 		$this->createTime = (string) Carbon::now();
+
+		$this->delay = $delay;
+	}
+
+	public function shouldDelay()
+	{
+		return intval($this->delay) > 0;
+	}
+
+	public function makeStartTime()
+	{
+		return Carbon::now()->addSeconds($this->delay)->timestamp;
 	}
 
 	public function handle()
 	{
-		echo "{$this->createTime} : TestJob@handel()\n";
+		echo "Excute Time : "
+		. ((string) Carbon::now())
+		. " \ Dispatch Time : {$this->createTime} \n";
 	}
 }
